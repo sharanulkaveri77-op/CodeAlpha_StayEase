@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,6 +31,12 @@ import java.util.List;
  */
 public class AppTest {
     public static void main(String[] args) {
+        // Configure standard output and error streams to UTF-8 for proper currency symbol rendering
+        try {
+            System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
+            System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8.name()));
+        } catch (Exception ignored) {}
+
         System.out.println("==================================================");
         System.out.println("   COMPREHENSIVE CODEALPHA SUITE: 18 TESTS        ");
         System.out.println("==================================================");

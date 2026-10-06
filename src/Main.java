@@ -1,3 +1,5 @@
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +17,12 @@ public class Main {
     private static Scanner scanner;
 
     public static void main(String[] args) {
+        // Configure standard output and error streams to UTF-8 for proper currency symbol rendering
+        try {
+            System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
+            System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8.name()));
+        } catch (Exception ignored) {}
+
         hotel = new Hotel("Grand CodeAlpha Hotel");
         scanner = new Scanner(System.in);
 
