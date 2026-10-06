@@ -61,7 +61,7 @@ public class Payment {
         System.out.println("==================================================");
         System.out.println("                 PAYMENT GATEWAY                  ");
         System.out.println("==================================================");
-        System.out.printf("Total Payable Amount: ₹%.2f%n", amount);
+        System.out.printf("Total Payable Amount: Rs. %.2f%n", amount);
         System.out.println();
         System.out.println("Available Payment Methods:");
         System.out.println("  1. UPI (GPay, PhonePe, Paytm)");
@@ -156,7 +156,7 @@ public class Payment {
         System.out.println("               PAYMENT RECEIPT                    ");
         System.out.println("--------------------------------------------------");
         System.out.printf("Transaction ID : %s%n", transactionId);
-        System.out.printf("Paid Amount    : ₹%.2f%n", amount);
+        System.out.printf("Paid Amount    : Rs. %.2f%n", amount);
         System.out.printf("Method         : %s%n", paymentMethod);
         System.out.printf("Status         : %s%n", paymentStatus);
         System.out.printf("Date & Time    : %s%n", paymentDate.format(TIME_FORMATTER));
@@ -166,7 +166,7 @@ public class Payment {
     @Override
     public String toString() {
         return "Payment [TxnID=" + transactionId +
-                ", Amount=₹" + String.format("%.2f", amount) +
+                ", Amount=Rs. " + String.format("%.2f", amount) +
                 ", Method=" + paymentMethod +
                 ", Status=" + paymentStatus +
                 ", Time=" + paymentDate.format(TIME_FORMATTER) + "]";

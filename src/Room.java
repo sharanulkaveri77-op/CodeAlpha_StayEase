@@ -85,7 +85,7 @@ public class Room {
      * Formats the room details as a neat row for tabular console display.
      */
     public String toTableRow() {
-        return String.format("%-11d %-14s ₹%-16.2f %-10s",
+        return String.format("%-11d %-14s Rs. %-13.2f %-10s",
                 roomNumber, category, pricePerNight, getStatusString());
     }
 
@@ -93,7 +93,7 @@ public class Room {
     public String toString() {
         return "Room [Room No=" + roomNumber +
                 ", Category=" + category +
-                ", Price/Night=₹" + String.format("%.2f", pricePerNight) +
+                ", Price/Night=Rs. " + String.format("%.2f", pricePerNight) +
                 ", Status=" + getStatusString() + "]";
     }
 }

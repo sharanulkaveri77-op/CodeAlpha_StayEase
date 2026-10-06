@@ -37,9 +37,9 @@ public class Hotel {
 
     /**
      * Populates the standard default inventory across Standard, Deluxe, and Suite categories.
-     * Standard: 101-105 @ ₹1500
-     * Deluxe:   201-205 @ ₹2500
-     * Suite:    301-303 @ ₹4000
+     * Standard: 101-105 @ Rs. 1500
+     * Deluxe:   201-205 @ Rs. 2500
+     * Suite:    301-303 @ Rs. 4000
      */
     public void initializeDefaultRooms() {
         rooms.clear();
@@ -222,7 +222,7 @@ public class Hotel {
                     "BookingID", "Room", "Check-in", "Check-out", "Amount", "Status");
             System.out.println("  ---------------------------------------------------------------------");
             for (Booking b : guestBookings) {
-                System.out.printf("  %-9s %-8d %-13s %-13s ₹%-10.2f %-10s%n",
+                System.out.printf("  %-9s %-8d %-13s %-13s Rs. %-7.2f %-10s%n",
                         b.getBookingId(), b.getRoomNumber(), b.getCheckInDate(),
                         b.getCheckOutDate(), b.getTotalAmount(), b.getBookingStatus());
             }
@@ -256,8 +256,8 @@ public class Hotel {
         System.out.printf("Check-out         : %s%n", checkOut);
         System.out.printf("Number of Nights  : %d%n", nights);
         System.out.printf("Guests            : %d%n", customer.getNumberOfGuests());
-        System.out.printf("Price/Night       : ₹%.2f%n", room.getPricePerNight());
-        System.out.printf("Total Amount      : ₹%.2f%n", total);
+        System.out.printf("Price/Night       : Rs. %.2f%n", room.getPricePerNight());
+        System.out.printf("Total Amount      : Rs. %.2f%n", total);
         System.out.println("==================================================");
     }
 
@@ -393,8 +393,8 @@ public class Hotel {
         System.out.printf("Check-out         : %s%n", booking.getCheckOutDate());
         System.out.printf("Number of Nights  : %d%n", booking.getNumberOfNights());
         System.out.printf("Guests            : %d%n", booking.getNumberOfGuests());
-        System.out.printf("Price/Night       : ₹%.2f%n", booking.getPricePerNight());
-        System.out.printf("Total Amount      : ₹%.2f%n", booking.getTotalAmount());
+        System.out.printf("Price/Night       : Rs. %.2f%n", booking.getPricePerNight());
+        System.out.printf("Total Amount      : Rs. %.2f%n", booking.getTotalAmount());
         System.out.println();
         System.out.printf("Payment Method    : %s%n", paymentMethod);
         System.out.printf("Transaction ID    : %s%n", booking.getTransactionId());

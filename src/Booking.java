@@ -198,8 +198,8 @@ public class Booking {
         System.out.printf("Check-out Date    : %s%n", checkOutDate);
         System.out.printf("Number of Nights  : %d%n", numberOfNights);
         System.out.printf("Number of Guests  : %d%n", numberOfGuests);
-        System.out.printf("Price Per Night   : ₹%.2f%n", pricePerNight);
-        System.out.printf("Total Amount      : ₹%.2f%n", totalAmount);
+        System.out.printf("Price Per Night   : Rs. %.2f%n", pricePerNight);
+        System.out.printf("Total Amount      : Rs. %.2f%n", totalAmount);
         System.out.printf("Booking Status    : %s%n", bookingStatus);
         System.out.printf("Payment Status    : %s%n", paymentStatus);
         System.out.printf("Transaction ID    : %s%n", transactionId);
@@ -210,7 +210,7 @@ public class Booking {
      * Formats booking as a clean table row for tabular summary lists.
      */
     public String toTableRow() {
-        return String.format("%-9s %-16s %-9d %-13s ₹%-11.2f %-10s",
+        return String.format("%-9s %-16s %-9d %-13s Rs. %-8.2f %-10s",
                 bookingId, customer.getFullName(), roomNumber, checkInDate, totalAmount, bookingStatus);
     }
 
@@ -221,7 +221,7 @@ public class Booking {
                 ", Room=" + roomNumber +
                 ", Dates=" + checkInDate + " to " + checkOutDate +
                 ", Nights=" + numberOfNights +
-                ", Total=₹" + String.format("%.2f", totalAmount) +
+                ", Total=Rs. " + String.format("%.2f", totalAmount) +
                 ", Status=" + bookingStatus + "]";
     }
 }

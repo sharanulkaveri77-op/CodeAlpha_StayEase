@@ -359,7 +359,7 @@ public class Main {
             System.out.printf("Booking ID     : %s%n", booking.getBookingId());
             System.out.printf("Transaction ID : %s%n", booking.getTransactionId());
             System.out.printf("Customer Name  : %s%n", booking.getCustomer().getFullName());
-            System.out.printf("Paid Amount    : ₹%.2f%n", booking.getTotalAmount());
+            System.out.printf("Paid Amount    : Rs. %.2f%n", booking.getTotalAmount());
             System.out.printf("Payment Status : %s%n", booking.getPaymentStatus());
             System.out.printf("Booking Status : %s%n", booking.getBookingStatus());
             System.out.println("--------------------------------------------------");
@@ -375,7 +375,7 @@ public class Main {
                 System.out.printf("Booking ID     : %s%n", b.getBookingId());
                 System.out.printf("Transaction ID : %s%n", b.getTransactionId());
                 System.out.printf("Customer Name  : %s%n", b.getCustomer().getFullName());
-                System.out.printf("Paid Amount    : ₹%.2f%n", b.getTotalAmount());
+                System.out.printf("Paid Amount    : Rs. %.2f%n", b.getTotalAmount());
                 System.out.printf("Payment Status : %s%n", b.getPaymentStatus());
                 System.out.printf("Booking Status : %s%n", b.getBookingStatus());
                 System.out.println("--------------------------------------------------");
