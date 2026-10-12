@@ -1,6 +1,6 @@
-# Hotel Reservation System
+# Hotel Reservation System (StayEase)
 
-A modular, portfolio-quality Console Application built with Core Java, adhering strictly to Object-Oriented Programming (OOP) principles, robust file handling, input validation, and transaction auditing.
+A modular, portfolio-quality Console Application built with Core Java, adhering strictly to Object-Oriented Programming (OOP) principles, robust file handling, input validation, transaction auditing, and formatted Excel reporting.
 
 Developed as part of the **CodeAlpha Java Programming Internship**.
 
@@ -15,7 +15,8 @@ The **Hotel Reservation System** automates the end-to-end hospitality lifecycle:
 - Automated calendar night calculation and dynamic billing.
 - Realistic payment processing simulation (UPI, Card, Cash) with audit transaction IDs.
 - Reservation lookup, cancellation with instant inventory release, and guest history tracking.
-- Complete data persistence using Java File I/O across application sessions.
+- Complete data persistence using text files inside the root-level `data/` directory across application sessions.
+- Comprehensive Excel spreadsheet export (`StayEase_Hotel_Data.xlsx`) generating formatted multi-sheet reports.
 
 ---
 
@@ -46,10 +47,16 @@ The **Hotel Reservation System** automates the end-to-end hospitality lifecycle:
 - **Reservation Cancellation**:
   - Cancellations update booking status to `CANCELLED` and immediately release the room back to `Available`.
   - Guarded against duplicate cancellations.
-- **Fault-Tolerant File Persistence**:
+- **Fault-Tolerant Text File Persistence**:
   - Clean CSV-based storage in `data/rooms.txt`, `data/customers.txt`, and `data/bookings.txt`.
+  - Stored strictly in text files under the root-level `data/` directory (no database required).
   - Auto-initialization of storage directories and default inventory.
   - Complete state restoration and sequence counter synchronization on restart.
+- **Excel Spreadsheet Export (.xlsx)**:
+  - Generates a styled, multi-sheet Microsoft Excel workbook (`StayEase_Hotel_Data.xlsx`).
+  - Creates three dedicated worksheets: **Rooms**, **Customers**, and **Bookings**.
+  - Formats numbers, dates, currency amounts (`₹ #,##0.00`), and availability/status badges.
+  - Preserves every historical record, including **cancelled bookings**.
 - **Crash-Resilient Input Validation**:
   - Sanitizes invalid menu selections, negative integers, malformed dates, and irregular phone/email formats without crashing.
 
@@ -61,11 +68,12 @@ The **Hotel Reservation System** automates the end-to-end hospitality lifecycle:
 - **Paradigm**: Object-Oriented Programming (OOP)
 - **Collections Framework**: `java.util.ArrayList`, `java.util.List`
 - **Date & Time API**: `java.time.LocalDate`, `java.time.temporal.ChronoUnit`
-- **File I/O**: `java.io.BufferedReader`, `java.io.BufferedWriter`, `java.io.File`
+- **File I/O & Packaging**: `java.io.BufferedReader`, `java.io.BufferedWriter`, `java.io.File`, `java.util.zip.ZipOutputStream`
 - **Regular Expressions**: `java.util.regex.Pattern`
 - **User Interface**: Standard Console UI with formatted tables
+- **Reporting Engine**: OpenXML (ECMA-376) zero-dependency `.xlsx` generation
 
-*(Note: In accordance with project requirements, external frameworks such as Spring Boot, Hibernate, MySQL, or third-party SDKs are purposefully omitted in this core edition to prioritize pure OOP and Java standard library fundamentals).*
+*(Note: In accordance with project requirements, external frameworks such as Spring Boot, Hibernate, MySQL, or third-party SDKs are purposefully omitted in this core edition to prioritize pure OOP and Java standard library fundamentals. All records are persisted using plain text files without an external database).*
 
 ---
 
@@ -81,17 +89,18 @@ HotelReservationSystem/
 │   ├── Customer.java           # Customer entity model
 │   ├── Booking.java            # Booking model with Customer composition
 │   ├── Payment.java            # Payment simulation & transaction generator
-│   ├── FileManager.java        # Persistent File I/O manager
+│   ├── FileManager.java        # Persistent File I/O manager (text-file persistence)
+│   ├── ExcelExporter.java      # OpenXML multi-sheet Excel (.xlsx) workbook generator
 │   ├── InputValidator.java     # Input validation & date parsing utilities
 │   └── AppTest.java            # Comprehensive 18-point automated test suite
 │
 ├── data/
-│   ├── rooms.txt               # Persistent room inventory records
-│   ├── customers.txt           # Persistent customer profiles
-│   └── bookings.txt            # Persistent reservation records
+│   ├── rooms.txt               # Persistent room inventory records (plain text)
+│   ├── customers.txt           # Persistent customer profiles (plain text)
+│   └── bookings.txt            # Persistent reservation records (plain text)
 │
 ├── screenshots/                # Application execution screenshots
-├── .gitignore                  # Git ignore rules for bytecode & IDE metadata
+├── .gitignore                  # Git ignore rules for bytecode, IDE files, and Excel outputs
 └── README.md                   # Project documentation
 ```
 
@@ -108,22 +117,38 @@ HotelReservationSystem/
 3. **Separation of Concerns (SoC)**:
    - `Main.java`: UI orchestration, menus, and user interaction.
    - `Hotel.java`: Core domain and business logic.
-   - `FileManager.java`: Pure I/O persistence.
+   - `FileManager.java`: Pure text-file I/O persistence.
+   - `ExcelExporter.java`: Dedicated spreadsheet formatting and OpenXML workbook packaging.
    - `InputValidator.java`: Input sanitization and rule checking.
 4. **Abstraction**:
-   - High-level business operations (`createBooking`, `cancelBooking`, `displayAvailableRooms`) encapsulate internal list traversals and state transitions.
+   - High-level business operations (`createBooking`, `cancelBooking`, `displayAvailableRooms`, `exportToExcel`) encapsulate internal list traversals and state transitions.
 
 ---
 
 ## 💾 File Handling Architecture
 
-All data is maintained inside the `data/` directory:
+The application does **not** rely on a database. All application data is persisted directly in flat text files located inside the root-level `data/` directory:
 
 | File | Purpose | Storage Schema |
 | :--- | :--- | :--- |
 | `data/rooms.txt` | Room inventory & status | `roomNumber,category,pricePerNight,available` |
 | `data/customers.txt` | Registered customer records | `customerId,fullName,phoneNumber,email,numberOfGuests` |
 | `data/bookings.txt` | Active and historical bookings | `bookingId,customerId,roomNumber,roomCategory,checkInDate,checkOutDate,numberOfNights,numberOfGuests,pricePerNight,totalAmount,bookingStatus,paymentStatus,transactionId` |
+
+---
+
+## 📊 Excel Export Feature
+
+The system includes a built-in Excel export utility that compiles live records into an authentic Microsoft Office OpenXML workbook:
+
+- **Target File**: `StayEase_Hotel_Data.xlsx` (generated at the project root)
+- **Menu Trigger**: Select option **`10. Export Data to Excel (.xlsx)`** from the main console menu.
+- **Three Worksheets**:
+  1. **Rooms**: Lists every room number, category, price per night (₹), and live availability status (`Available` or `Occupied`).
+  2. **Customers**: Contains customer IDs, full names, contact phone numbers, email addresses, and guest counts.
+  3. **Bookings**: Contains comprehensive reservation details including booking ID, customer ID, guest name, room details, check-in/check-out dates, night counts, pricing breakdown, booking status, payment status, and audit transaction IDs.
+- **Preserves Cancelled Bookings**: Every historical record is retained in the export, including `CANCELLED` bookings, clearly designated with status badges.
+- **Professional Formatting**: Styled with dark navy header rows, auto-tuned column widths, borders, formatted dates, and currency formatting (`₹ #,##0.00`).
 
 ---
 
@@ -135,22 +160,17 @@ All data is maintained inside the `data/` directory:
 
 ### Compilation and Execution
 
-1. **Open terminal** in the root project directory:
-   ```bash
-   cd "Hotel Reservation System"
-   ```
-
-2. **Compile all Java source files**:
+1. **Compile all Java source files**:
    ```bash
    javac -d out src/*.java
    ```
 
-3. **Launch the Hotel Reservation System**:
+2. **Run the Hotel Reservation System application**:
    ```bash
    java -cp out Main
    ```
 
-4. **Run the Automated Test Suite (Optional)**:
+3. **Run the Automated Test Suite**:
    ```bash
    java -cp out AppTest
    ```
@@ -159,7 +179,7 @@ All data is maintained inside the `data/` directory:
 
 ## 📖 How to Use
 
-When the application launches, the main menu displays 10 options:
+When the application launches, the main menu displays 11 options:
 
 ```
 ==================================================
@@ -174,19 +194,24 @@ When the application launches, the main menu displays 10 options:
 7. Search Booking
 8. View Customer Details
 9. View Payment Details
-10. Exit
+10. Export Data to Excel (.xlsx)
+11. Exit
 ==================================================
 ```
 
-### Typical Booking Flow
-1. Select **3 (Book a Room)**.
-2. Enter your 10-digit mobile number. If you are a returning guest, your name and email are recognized automatically.
-3. Review the available rooms table and enter your desired room number (e.g. `201`).
-4. Enter Check-in Date (`YYYY-MM-DD`) and Check-out Date (`YYYY-MM-DD`).
-5. Review the generated **Booking Summary**.
-6. Select **1 (Confirm Booking)**.
-7. Choose your payment method (**1 for UPI**, **2 for Card**, **3 for Cash**).
-8. Receive your formal **Booking Confirmation Card** and unique **Transaction ID**.
+### Typical Workflows
+
+- **Book a Room (Option 3)**:
+  1. Enter guest phone number (existing guests are recognized automatically).
+  2. Select an available room number (e.g., `201`).
+  3. Enter check-in and check-out dates (`YYYY-MM-DD`).
+  4. Review the booking summary and choose payment method (UPI, Card, or Cash).
+  5. Receive the confirmation card with unique Booking ID (`BK1001`) and Transaction ID (`TXN10001`).
+
+- **Export Data to Excel (Option 10)**:
+  1. Choose Option **10** from the menu.
+  2. The system flushes all active records to disk and generates `StayEase_Hotel_Data.xlsx`.
+  3. Open `StayEase_Hotel_Data.xlsx` in Microsoft Excel or Google Sheets to inspect the **Rooms**, **Customers**, and **Bookings** worksheets.
 
 ---
 
@@ -237,7 +262,7 @@ BK1002    Aman Sharma      301       2026-10-15    ₹12000.00    CONFIRMED
 The project includes an end-to-end automated verification harness ([AppTest.java](file:///d:/Hotel%20Reservation%20System/src/AppTest.java)) executing all 18 CodeAlpha required scenarios:
 
 | Test ID | Test Scenario | Verified Result |
-| :---: | :--- | :---: |
+| :--- :---: | :--- | :---: |
 | **TEST 1** | View all 13 initial rooms | ✅ PASS |
 | **TEST 2** | Search Standard rooms (5 rooms) | ✅ PASS |
 | **TEST 3** | Search Deluxe rooms (5 rooms) | ✅ PASS |

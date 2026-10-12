@@ -34,7 +34,7 @@ public class Main {
         boolean running = true;
         while (running) {
             displayMainMenu();
-            int choice = InputValidator.readMenuChoice(scanner, 1, 10);
+            int choice = InputValidator.readMenuChoice(scanner, 1, 11);
             System.out.println();
 
             switch (choice) {
@@ -66,6 +66,9 @@ public class Main {
                     handleViewPaymentDetails();
                     break;
                 case 10:
+                    handleExportToExcel();
+                    break;
+                case 11:
                     handleExit();
                     running = false;
                     break;
@@ -92,7 +95,8 @@ public class Main {
         System.out.println("7. Search Booking");
         System.out.println("8. View Customer Details");
         System.out.println("9. View Payment Details");
-        System.out.println("10. Exit");
+        System.out.println("10. Export Data to Excel (.xlsx)");
+        System.out.println("11. Exit");
         System.out.println("==================================================");
     }
 
@@ -386,7 +390,29 @@ public class Main {
         System.out.println("[!] No payment record found matching \"" + query + "\".");
     }
 
-    // --- Option 10: Exit ---
+    // --- Option 10: Export Data to Excel ---
+    private static void handleExportToExcel() {
+        System.out.println("==================================================");
+        System.out.println("         EXPORT DATA TO EXCEL WORKBOOK            ");
+        System.out.println("==================================================");
+        System.out.println("Saving in-memory changes before export...");
+        FileManager.saveAll(hotel);
+
+        String exportFile = "StayEase_Hotel_Data.xlsx";
+        System.out.println("Exporting live records into " + exportFile + "...");
+        boolean success = ExcelExporter.exportData(hotel.getRooms(), hotel.getCustomers(), hotel.getBookings(), exportFile);
+
+        if (success) {
+            System.out.println("\n[✓] Export successful!");
+            System.out.println("    Target File : " + exportFile);
+            System.out.println("    Worksheets  : Rooms (13), Customers (" + hotel.getCustomers().size() + "), Bookings (" + hotel.getBookings().size() + ")");
+            System.out.println("    Status      : All records preserved (including cancelled bookings).");
+        } else {
+            System.err.println("\n[!] Excel export encountered an error.");
+        }
+    }
+
+    // --- Option 11: Exit ---
     private static void handleExit() {
         System.out.println("Saving all changes to disk...");
         FileManager.saveAll(hotel);

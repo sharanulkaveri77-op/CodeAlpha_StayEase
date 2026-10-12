@@ -17,3 +17,7 @@ target/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Excel exports and temporary lock files
+StayEase_Hotel_Data.xlsx
+~$*.xlsx
